@@ -79,3 +79,22 @@ Sensitive credentials (API keys, OAuth secrets) are stored using **environment v
 **Swapnil Suryawanshi**  
 Computer Engineering Student  
 Passionate about Backend Development & Data Systems
+
+---
+
+## 📸 Application Screenshots
+
+### 🔐 Login Page
+![Login Page](screenshots/login.png)
+
+### 🎛 Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png)
+
+### 👨‍🎓 Student Dashboard
+![Student Dashboard](screenshots/student_dashboard.png)
+
+### 📊 Attendance Analytics
+![Analytics](screenshots/analytics.png)
+
+### 📄 PDF / Excel Report Export
+![Reports](screenshots/reports.png)
