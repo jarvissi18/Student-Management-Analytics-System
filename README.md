@@ -85,16 +85,16 @@ Passionate about Backend Development & Data Systems
 ## 📸 Application Screenshots
 
 ### 🔐 Login Page
-![Login Page](screenshots/Login page.png)
+![Login Page](screenshots/login.png)
 
 ### 🎛 Admin Dashboard
-![Admin Dashboard](screenshots/Admin dashboard.png)
+![Admin Dashboard](screenshots/admin_dashboard.png)
 
 ### 👨‍🎓 Student Dashboard
-![Student Dashboard](screenshots/Student dashboard.png)
+![Student Dashboard](screenshots/student_dashboard.png)
 
 ### 📊 Attendance Analytics
-![Analytics](screenshots/Attendance analytics.png)
+![Analytics](screenshots/attendance_analytics.png)
 
 ### 📄 PDF / Excel Report Export
-![Reports](screenshots/Attendance report.png)
+![Reports](screenshots/attendance_report.png)
