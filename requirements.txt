@@ -1,0 +1,8 @@
+Flask
+python-dotenv
+Authlib
+Werkzeug
+reportlab
+openpyxl
+pandas
+fpdf

@@ -4,3 +4,5 @@ __pycache__/
 *.log
 Google.env
 static/uploads/
+.env
+
