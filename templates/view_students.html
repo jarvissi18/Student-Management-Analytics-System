@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Students | Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('students_page') }}" class="active">View Students</a>
+
+        {% if role == "ADMIN" %}
+            <a href="{{ url_for('search_students_page') }}">Search Students</a>
+            <a href="{{ url_for('add_student_page') }}">Add Student</a>
+            <a href="{{ url_for('attendance_page') }}">Mark Attendance</a>
+            <a href="{{ url_for('manage_users') }}">Manage Users</a>
+            <a href="{{ url_for('reports_page') }}">Reports</a>
+            <a href="{{ url_for('analytics_page') }}">Analytics</a>
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <div class="topbar">
+            <h1>Student Records</h1>
+        </div>
+
+        <div class="export-buttons">
+            <a href="{{ url_for('export_excel') }}" class="btn-export">⬇ Download Excel</a>
+        </div>
+
+        <div class="table-card animate">
+
+            <p>Total students fetched: {{ students|length }}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Branch</th>
+
+                        {% if role == "ADMIN" %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% if students and students|length > 0 %}
+                    {% for s in students %}
+                    <tr>
+                        <td>{{ s[0] }}</td>
+
+                        <!-- PHOTO COLUMN -->
+                        <td>
+                            {% if s|length > 4 and s[4] %}
+                                <img src="{{ url_for('static', filename='uploads/' + s[4]) }}"
+                                     width="50" height="50"
+                                     style="border-radius:50%; object-fit:cover;">
+                            {% else %}
+                                No Photo
+                            {% endif %}
+                        </td>
+
+                        <td>{{ s[1] }}</td>
+                        <td>{{ s[2] }}</td>
+                        <td>{{ s[3] }}</td>
+
+                        {% if role == "ADMIN" %}
+                        <td class="action-btns">
+                            <a href="{{ url_for('edit_student_page', roll=s[0]) }}" class="btn-action edit-btn">
+                                ✏ Edit
+                            </a>
+
+                            <a href="{{ url_for('delete_student_route', roll=s[0]) }}"
+                               class="btn-action delete-btn"
+                               onclick="return confirm('Delete this student?')">
+                                🗑 Delete
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:20px;">
+                            No students found
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

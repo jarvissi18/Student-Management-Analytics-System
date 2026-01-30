@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f9;
+        }
+
+        .layout {
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            background: #2396c3;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar a:hover {
+            background: #1b7fa6;
+        }
+
+        /* MAIN CONTENT */
+        .content {
+            margin-left: 260px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* PROFILE CARD */
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+            text-align: center;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* 🔥 PHOTO FIX */
+        .student-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #0b3d91;
+            display: block;
+            margin: 0 auto 15px;
+        }
+
+        .profile-card h2 {
+            margin: 10px 0 5px;
+            font-size: 26px;
+        }
+
+        .profile-card p {
+            font-size: 18px;
+            margin: 6px 0;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #0b3d91;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2> Student Management & Analytics System</h2>
+        <a href="{{ url_for('dashboard') }}">Student Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <h1>Student Profile</h1>
+
+        <div class="profile-card">
+
+            {% if student %}
+
+                <!-- PROFILE PHOTO -->
+                {% if student|length > 4 and student[4] %}
+                    <img src="{{ url_for('static', filename='uploads/' + student[4]) }}"
+                         class="student-photo">
+                {% else %}
+                    <img src="{{ url_for('static', filename='Profile_Photo.jpeg') }}"
+                         class="student-photo">
+                {% endif %}
+
+                <!-- DETAILS -->
+                <h2>{{ student[1] }}</h2>
+                <p><span class="label">Roll Number:</span> {{ student[0] }}</p>
+                <p><span class="label">Age:</span> {{ student[2] }}</p>
+                <p><span class="label">Branch:</span> {{ student[3] }}</p>
+
+            {% else %}
+                <p>No profile data found.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

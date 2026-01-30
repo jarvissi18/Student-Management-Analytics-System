@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics |Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('students_page') }}">View Students</a>
+        
+
+        {% if session.get("role") == "ADMIN" %}
+        <a href="{{ url_for('search_students_page') }}">Search Students</a>
+            <a href="{{ url_for('manage_users') }}">Manage Users</a>
+            <a href="{{ url_for('reports_page') }}">Reports</a>
+            <a href="{{ url_for('analytics_page') }}" class="active">Analytics</a>
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <main class="content">
+
+        <div class="topbar">
+            <h1>Analytics - Pie Chart</h1>
+        </div>
+
+        <div class="chart-card animate">
+            <h2>Student Distribution by Branch</h2>
+
+           <div class="chart-wrapper">
+                <canvas id="pieChart"></canvas>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const ctx = document.getElementById('pieChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ labels | tojson }},
+            datasets: [{
+                data: {{ values | tojson }},
+                borderWidth: 1
+            }]
+        },
+       options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard | Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+
+    /* WELCOME CARD */
+.welcome-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.welcome-card h2 {
+    margin: 0;
+    color: #0b3d91;
+}
+
+/* STATS */
+.stats-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.stat-box h3 {
+    margin-bottom: 10px;
+    color: #2396c3;
+}
+
+.stat-box p {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* ACTION BUTTONS */
+.quick-actions {
+    text-align: center;
+}
+
+.action-btn {
+    display: inline-block;
+    background: #2396c3;
+    color: white;
+    padding: 12px 22px;
+    margin: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.action-btn:hover {
+    background: #1b7fa6;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+.welcome-card {
+    border-left: 6px solid #2396c3;
+}
+
+
+
+   }
+    </style>
+</head>
+</body>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+        <a href="/student/dashboard" class="active">Student Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <main class="content">
+
+    <div class="topbar">
+        <h1>Student Dashboard</h1>
+    </div>
+
+    <!-- Welcome -->
+    <div class="welcome-card">
+        <h2>Welcome, {{ student[1] }}</h2>
+        <p>Here’s your academic overview.</p>
+    </div>
+
+
+    <!-- Buttons -->
+    <div class="quick-actions">
+        <a href="{{ url_for('my_attendance') }}" class="action-btn">View Attendance</a>
+        <a href="/student/profile" class="action-btn">My Profile</a>
+        <a href="{{ url_for('students_page') }}" class="action-btn">View Students</a>
+    </div>
+
+</main>
+
+
+</div>
+
+</body>
+</html>

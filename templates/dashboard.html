@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard |Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+
+        <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+        <a href="{{ url_for('students_page') }}">View Students</a>
+
+        {% if role == "ADMIN" %}
+        <a href="{{ url_for('attendance_page') }}">Mark Attendance</a>
+        <a href="/low-attendance">Low Attendance Alert</a>
+        <a href="{{ url_for('attendance_analytics') }}"> Attendance Analytics</a>
+        <a href="{{ url_for('attendance_report', date=today) }}" class="btn">Attendance Report</a>
+        <a href="{{ url_for('reports_page') }}">Reports</a>
+        <a href="{{ url_for('analytics_page') }}">Analytics</a>
+
+
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <main class="content">
+
+        {% block content %}
+        <div class="topbar">
+            <h1>Dashboard</h1>
+            <span class="role">{{ role }}</span>
+        </div>
+
+        <div class="card-grid">
+            <div class="card animate">
+                <h3>Total Students</h3>
+                <h1>{{ total_students }}</h1>
+            </div>
+
+            <div class="card gradient animate">
+                <h3>Status</h3>
+                <p>System Active</p>
+            </div>
+                    {% endblock %}
+
+        </div>
+
+    </main>
+
+
+</div>
+
+</body>
+</html>
+

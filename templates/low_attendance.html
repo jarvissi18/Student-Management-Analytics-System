@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Low Attendance Alert</title>
+    <style>
+        body { font-family: Arial; padding: 30px; background:#f4f6f9; }
+        h2 { color:#c0392b; }
+        table { width: 50%; border-collapse: collapse; background:white; }
+        th, td { padding: 10px; border:1px solid #ddd; text-align:center; }
+        th { background:#0A3D91; color:white; }
+        tr:nth-child(even){ background:#f2f2f2; }
+    </style>
+</head>
+<body>
+
+<h2 style="color:red;">⚠ Students Below 75% Attendance</h2>
+
+{% if students %}
+<table border="1" cellpadding="10">
+    <tr style="background:#003366;color:white;">
+        <th>Name</th>
+        <th>Attendance %</th>
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s[0] }}</td>
+        <td style="color:red;font-weight:bold;">{{ s[1] }}%</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p style="color:green;font-weight:bold;">
+    ✅ All students have good attendance.
+</p>
+{% endif %}
+
+
+</body>
+</html>

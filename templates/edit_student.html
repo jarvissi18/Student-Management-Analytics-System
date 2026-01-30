@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+<div class="layout">
+
+<main class="content">
+    <div class="form-card animate">
+        <h2>Edit Student</h2>
+
+        <!-- IMPORTANT: enctype required for file upload -->
+        <form method="POST"
+              action="{{ url_for('update_student_route', roll=student[0]) }}"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Roll</label>
+                <input type="text" value="{{ student[0] }}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" value="{{ student[1] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" name="age" value="{{ student[2] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Branch</label>
+                <input type="text" name="branch" value="{{ student[3] }}" required>
+            </div>
+
+            <!-- 🔥 CURRENT PHOTO -->
+            {% if student|length > 4 and student[4] %}
+            <div class="form-group">
+                <label>Current Photo</label><br>
+                <img src="{{ url_for('static', filename='uploads/' + student[4]) }}"
+                     class="student-photo-large">
+            </div>
+            {% endif %}
+
+            <!-- 🔥 UPDATE PHOTO -->
+            <div class="form-group">
+                <label>Change Photo</label>
+                <input type="file" name="photo" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn-primary">Update Student</button>
+        </form>
+    </div>
+</main>
+
+</div>
+</body>
+</html>

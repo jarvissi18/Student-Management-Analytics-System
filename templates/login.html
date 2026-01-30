@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body.login-page {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #165dcf, #138808);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            animation: float 6s infinite ease-in-out;
+        }
+
+        body::before { width: 300px; height: 300px; top: -80px; left: -80px; }
+        body::after { width: 200px; height: 200px; bottom: -60px; right: -60px; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .login-container {
+            width: 900px;
+            height: 600px;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transition: transform 0.4s;
+        }
+
+
+        .login-container:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
+        }
+        input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+
+        .left-panel {
+    flex: 1;
+    background: linear-gradient(120deg, #1d5fa7, #1abc9c);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-panel {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+        .left-panel img {
+            width: 80%;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        .right-panel {
+            background: white;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .right-panel h1 { color: #0A3D91; }
+
+        .right-panel input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        .right-panel input:focus {
+            border-color: #0A3D91;
+            box-shadow: 0 0 5px rgba(10,61,145,0.5);
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: linear-gradient(to right, #0A3D91, #138808);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: none;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .google-btn {
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .role-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .role-switch button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #ddd;
+        }
+
+        .role-switch .active {
+            background: linear-gradient(to right, #0A3D91, #138808);
+            color: white;
+        }
+
+        .otp-box { display: none; }
+        .forgot-link { text-align:center; margin-top:10px; }
+        .error-box { color:red; text-align:center; margin-top:10px; }
+    </style>
+</head>
+
+<body class="login-page">
+
+<div class="login-container">
+
+    <div class="left-panel">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        <h2>Welcome Students</h2>
+        <p>Student Management & Analytics System</p>
+    </div>
+
+    <div class="right-panel">
+        <h1>Admin Login</h1>
+        <p class="sub-text">Enter your credentials to continue</p>
+
+        <form method="POST">
+
+            <div class="role-switch">
+                <button type="button" id="adminBtn" class="active">Admin</button>
+                <button type="button" id="studentBtn">Student</button>
+            </div>
+
+            <input type="hidden" name="role" id="role" value="ADMIN">
+
+            <input type="text" name="username" placeholder="Username" required>
+
+            <div style="position:relative;">
+                <input type="password" name="password" id="passwordField" placeholder="Password" required>
+                <span onclick="togglePassword()" style="position:absolute; right:12px; top:18px; cursor:pointer;">👁</span>
+            </div>
+
+            <button type="submit" class="btn-main">Login</button>
+
+<a href="/google-login">
+    <button type="button" class="google-btn">🔵 Continue with Google</button>
+</a>
+
+
+
+            <div class="otp-box" id="otpBox">
+                <input type="text" placeholder="Enter OTP">
+            </div>
+
+            <div class="forgot-link">
+                <a href="{{ url_for('forgot_password_page') }}">Forgot Password?</a>
+            </div>
+
+            {% if show_error %}
+            <div class="error-box">Invalid credentials</div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<script>
+const adminBtn = document.getElementById("adminBtn");
+const studentBtn = document.getElementById("studentBtn");
+const roleInput = document.getElementById("role");
+
+adminBtn.onclick = () => {
+    adminBtn.classList.add("active");
+    studentBtn.classList.remove("active");
+    roleInput.value = "ADMIN";
+    document.querySelector("h1").innerText = "Admin Login";
+};
+
+studentBtn.onclick = () => {
+    studentBtn.classList.add("active");
+    adminBtn.classList.remove("active");
+    roleInput.value = "STUDENT";
+    document.querySelector("h1").innerText = "Student Login";
+};
+
+function togglePassword() {
+    const field = document.getElementById("passwordField");
+    field.type = field.type === "password" ? "text" : "password";
+}
+
+function toggleOTP() {
+    const box = document.getElementById("otpBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users |Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('students_page') }}">View Students</a>
+        <a href="{{ url_for('search_students_page') }}">Search Students</a>
+        <a href="{{ url_for('attendance_page') }}">Mark Attendance</a>
+        <a href="{{ url_for('manage_users') }}" class="active">Manage Users</a>
+        <a href="{{ url_for('add_user_page') }}">Add User</a>
+        <a href="{{ url_for('reports_page') }}">Reports</a>
+        <a href="{{ url_for('analytics_page') }}">Analytics</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <main class="content">
+        <div class="topbar">
+            <h1>Manage Users</h1>
+        </div>
+
+        <div class="table-card animate">
+            <p>Total users fetched: {{ users|length }}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+ <tbody>
+{% if users and users|length > 0 %}
+    {% for u in users %}
+    <tr>
+        <td>{{ u[0] }}</td>   <!-- username -->
+        <td>{{ u[1] }}</td>   <!-- role -->
+        <td>
+            {% if u[0] != current %}
+            <a href="{{ url_for('delete_user_page', username=u[0]) }}"
+               class="btn-danger">Delete</a>
+            {% else %}
+            —
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="3" style="text-align:center; padding:20px;">
+            No users found
+        </td>
+    </tr>
+{% endif %}
+</tbody>
+
+            </table>
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>

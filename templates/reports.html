@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports |Student Management & Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Student Management & Analytics System</h2>
+
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('students_page') }}">View Students</a>
+
+        {% if session.get("role") == "ADMIN" %}
+            <a href="{{ url_for('add_student_page') }}">Add Student</a>
+            <a href="{{ url_for('manage_users') }}">Manage Users</a>
+            <a href="{{ url_for('add_user_page') }}">Add User</a>
+            <a href="{{ url_for('reports_page') }}" class="active">Reports</a>
+            <a href="{{ url_for('analytics_page') }}">Analytics</a>
+
+
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="content">
+
+        <div class="topbar">
+            <h1>Reports - Bar Chart</h1>
+        </div>
+
+        <!-- 🔽 ADD THIS BUTTON BLOCK HERE -->
+    <div style="text-align:right; margin-bottom:10px;">
+        <a href="{{ url_for('download_report') }}" class="btn-primary">
+            📄 Download Student Report
+        </a>
+    </div>
+        <!-- CHART CARD -->
+        <div class="chart-card animate">
+            <h2>Students by Branch</h2>
+            <div class="chart-wrapper">
+    <canvas id="branchChart"></canvas>
+</div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const ctx = document.getElementById('branchChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels | tojson }},
+            datasets: [{
+                label: 'Number of Students',
+                data: {{ values | tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

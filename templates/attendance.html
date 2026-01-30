@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mark Attendance</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #165dcf, #138808);
+            margin: 0;
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            max-width: 900px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0A3D91;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background: #0A3D91;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .present { background: #28a745; color: white; }
+        .absent { background: #dc3545; color: white; }
+
+        .save-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #0A3D91, #138808);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📅 Mark Attendance — {{ today }}</h2>
+
+    <form method="POST" action="{{ url_for('save_attendance') }}">
+<table class="attendance-table">
+    <tr>
+        <th>Roll</th>
+        <th>Name</th>
+        <th>Present</th>
+        <th>Absent</th>
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s[0] }}</td>
+        <td>{{ s[1] }}</td>
+
+        <!-- 👇 UNIQUE NAME -->
+        <td>
+            <input type="radio"
+                   name="status_{{ s[0] }}"
+                   value="Present"
+                   required>
+        </td>
+
+        <td>
+            <input type="radio"
+                   name="status_{{ s[0] }}"
+                   value="Absent"
+                   required>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<button type="submit" class="save-btn">Save Attendance</button>
+</form>
+</div>
+
+</body>
+</html>

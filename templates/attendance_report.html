@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Report</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(135deg, #165dcf, #138808);
+            padding: 40px;
+        }
+        .report-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        h2 { color: #0A3D91; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #0A3D91;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .present { color: green; font-weight: bold; }
+        .absent { color: red; font-weight: bold; }
+
+        .date-form {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-card">
+    <h2>📊 Attendance Report</h2>
+
+    <form method="GET" action="/attendance-report" class="date-form">
+        <input type="date" name="date" required>
+        <button type="submit">Load Report</button>
+    </form>
+
+    <div style="text-align:center; margin-bottom:15px;">
+        <a href="{{ url_for('download_attendance_pdf', date=date) }}" class="btn btn-danger">
+    Download PDF
+</a>
+
+<a href="{{ url_for('download_attendance_excel', date=date) }}" class="btn btn-success">
+    Download Excel
+</a>
+
+    </div>
+
+<style>
+.btn{
+    background:#0A3D91;
+    color:white;
+    padding:8px 15px;
+    border-radius:6px;
+    text-decoration:none;
+    margin-right:10px;
+}
+.btn:hover{ background:#138808; }
+</style>
+
+
+    {% if records %}
+    <table>
+        <tr>
+            <th>Roll</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+
+        {% for r in records %}
+        <tr>
+            <td>{{ r[0] }}</td>
+            <td>{{ r[1] }}</td>
+            <td class="{{ 'present' if r[2]=='Present' else 'absent' }}">{{ r[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+</body>
+</html>
+

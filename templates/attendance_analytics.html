@@ -1,0 +1,58 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+
+<div class="analytics-main">
+
+    <h2>📊 Attendance Analytics</h2>
+
+    <div class="summary-cards">
+        <div class="card present">
+            <span>Present</span>
+            <strong>{{ present }}</strong>
+        </div>
+        <div class="card absent">
+            <span>Absent</span>
+            <strong>{{ absent }}</strong>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-box">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+new Chart(document.getElementById("pieChart"), {
+    type: "pie",
+    data: {
+        labels: ["Present", "Absent"],
+        datasets: [{
+            data: [{{ present }}, {{ absent }}],
+            backgroundColor: ["#138808", "#e74c3c"]
+        }]
+    }
+});
+
+new Chart(document.getElementById("barChart"), {
+    type: "bar",
+    data: {
+        labels: {{ labels | tojson }},
+        datasets: [{
+            label: "Present by Branch",
+            data: {{ values | tojson }},
+            backgroundColor: "#0A3D91"
+        }]
+    }
+});
+</script>
+
+{% endblock %}
