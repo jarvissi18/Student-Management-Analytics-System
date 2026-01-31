@@ -439,6 +439,10 @@ def attendance_report():
 
 # =================  ATTENDANCE ANALYTICS =================
 
+from datetime import date
+from flask import session, redirect, url_for, render_template
+from database import get_connection
+
 @app.route("/attendance-analytics")
 def attendance_analytics():
     if session.get("role") != "ADMIN":
@@ -447,12 +451,16 @@ def attendance_analytics():
     conn = get_connection()
     cur = conn.cursor()
 
-    # Present vs Absent
+    # 🔥 Get today's date
+    today = date.today().isoformat()
+
+    # ================= PRESENT vs ABSENT (TODAY ONLY) =================
     cur.execute("""
         SELECT status, COUNT(*)
         FROM attendance
+        WHERE date = ?
         GROUP BY status
-    """)
+    """, (today,))
     data = cur.fetchall()
 
     present = 0
@@ -463,14 +471,14 @@ def attendance_analytics():
         elif row[0] == "Absent":
             absent = row[1]
 
-    # Branch-wise attendance
+    # ================= BRANCH-WISE PRESENT (TODAY ONLY) =================
     cur.execute("""
         SELECT s.branch, COUNT(a.status)
         FROM attendance a
         JOIN students s ON s.roll = a.roll
-        WHERE a.status='Present'
+        WHERE a.status = 'Present' AND a.date = ?
         GROUP BY s.branch
-    """)
+    """, (today,))
     branch_data = cur.fetchall()
 
     conn.close()

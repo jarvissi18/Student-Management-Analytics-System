@@ -13,42 +13,82 @@
             background: #f4f6f9;
         }
 
-        .layout {
-            display: flex;
-        }
+         /* LOGOUT */
+.logout-card {
+    background: linear-gradient(to right, #FF5733, #FF9933);
+    color: white;
+}
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 240px;
-            background: #2396c3;
-            color: white;
-            height: 100vh;
-            padding: 20px;
-            position: fixed;
-        }
+.logout-card h3,
+.logout-card p {
+    color: white;
+}
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+.logout-btn {
+    background: #ff4d4d;
+    color: rgb(173, 25, 25);
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.logout-btn:hover {
+    opacity: 0.9;
+}
 
-        .sidebar a {
-            display: block;
-            color: white;
-            padding: 12px;
-            text-decoration: none;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
+body.dashboard-page {
+    background: #f4f6f8;
+}
 
-        .sidebar a:hover {
-            background: #1b7fa6;
-        }
+/* Layout */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 275px;
+    background: #2396c3;
+    color: white;
+    padding: 20px;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar .logout {
+    margin-top: auto;
+    background: #dc2626;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}
 
         /* MAIN CONTENT */
         .content {
-            margin-left: 260px;
-            padding: 40px;
+            margin-left: 30px;
+            padding: 30px;
             width: 100%;
         }
 

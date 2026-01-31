@@ -17,12 +17,12 @@
         <a href="{{ url_for('students_page') }}">View Students</a>
 
         {% if role == "ADMIN" %}
+        <a href="{{ url_for('manage_users') }}">Manage Users</a>
         <a href="{{ url_for('attendance_page') }}">Mark Attendance</a>
         <a href="/low-attendance">Low Attendance Alert</a>
         <a href="{{ url_for('attendance_analytics') }}"> Attendance Analytics</a>
         <a href="{{ url_for('attendance_report', date=today) }}" class="btn">Attendance Report</a>
         <a href="{{ url_for('reports_page') }}">Reports</a>
-        <a href="{{ url_for('analytics_page') }}">Analytics</a>
 
 
         {% endif %}
