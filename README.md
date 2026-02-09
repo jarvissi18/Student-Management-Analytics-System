@@ -75,3 +75,52 @@ git clone https://github.com/jarvissi18/Student-Management-Analytics-System
 cd Student-Management-Analytics-System
 pip install -r requirements.txt
 python app.py
+
+Open in browser:  
+👉 http://127.0.0.1:5000
+
+---
+
+🔑 Default Admin Login
+Username: admin
+Password: admin123
+
+🔗 Google Login Setup
+
+1. Go to Google Cloud Console
+2. Create OAuth Client ID
+3. Add Redirect URI:
+http://127.0.0.1:5000/google-auth
+
+## 🔒 Security
+
+Sensitive credentials (API keys, OAuth secrets) are stored using **environment variables** and excluded from version control.
+
+---
+
+## 👨‍💻 Author
+
+**Swapnil Suryawanshi**  
+Computer Engineering Student  
+Passionate about Backend Development & Data Systems
+
+---
+
+## 📸 Application Screenshots
+
+### 🔐 Login Page
+![Login Page](screenshots/login.png)
+
+### 🎛 Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png)
+
+### 👨‍🎓 Student Dashboard
+![Student Dashboard](screenshots/student_dashboard.png)
+
+### 📊 Attendance Analytics
+![Analytics](screenshots/attendance_analytics.png)
+
+### 📄 PDF / Excel Report Export
+![Reports](screenshots/attendance_report.png)
+
+This is the old readme file so give me the new updated file like this
