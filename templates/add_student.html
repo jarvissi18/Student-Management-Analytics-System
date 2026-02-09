@@ -39,7 +39,6 @@
                 <div class="error-box">{{ error }}</div>
             {% endif %}
 
-            <!-- 🔥 IMPORTANT CHANGE HERE -->
             <form method="POST" enctype="multipart/form-data" class="student-form">
 
                 <div class="form-group">
@@ -62,7 +61,11 @@
                     <input type="text" name="branch" placeholder="Enter Branch" required>
                 </div>
 
-                <!-- 🆕 PHOTO FIELD ADDED -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter Email" required>
+                </div>
+
                 <div class="form-group">
                     <label>Student Photo</label>
                     <input type="file" name="photo" accept="image/*">

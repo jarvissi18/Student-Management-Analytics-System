@@ -12,7 +12,6 @@
     <div class="form-card animate">
         <h2>Edit Student</h2>
 
-        <!-- IMPORTANT: enctype required for file upload -->
         <form method="POST"
               action="{{ url_for('update_student_route', roll=student[0]) }}"
               enctype="multipart/form-data">
@@ -37,16 +36,20 @@
                 <input type="text" name="branch" value="{{ student[3] }}" required>
             </div>
 
-            <!-- 🔥 CURRENT PHOTO -->
-            {% if student|length > 4 and student[4] %}
-            <div class="form-group">
-                <label>Current Photo</label><br>
-                <img src="{{ url_for('static', filename='uploads/' + student[4]) }}"
-                     class="student-photo-large">
+             <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ student[4] }}" required>
             </div>
-            {% endif %}
 
-            <!-- 🔥 UPDATE PHOTO -->
+            {% if student[5] %}
+<div class="form-group">
+    <label>Current Photo</label><br>
+    <img src="{{ url_for('static', filename='uploads/' + student[5]) }}"
+         class="student-photo-large">
+</div>
+{% endif %}
+
+
             <div class="form-group">
                 <label>Change Photo</label>
                 <input type="file" name="photo" accept="image/*">

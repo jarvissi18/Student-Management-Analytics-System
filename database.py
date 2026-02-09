@@ -1,12 +1,17 @@
 import sqlite3
 from werkzeug.security import generate_password_hash
 
+
+# ================= CONNECTION =================
+
 def get_connection():
     conn = sqlite3.connect("student.db", timeout=10, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL;")
     return conn
 
 
+# ================= CREATE TABLES =================
 
 def create_tables():
     conn = get_connection()
@@ -30,36 +35,34 @@ def create_tables():
         name TEXT NOT NULL,
         age INTEGER NOT NULL,
         branch TEXT NOT NULL,
+        email TEXT,
         username TEXT UNIQUE
     )
     """)
-    
-    
+
     # ================= ATTENDANCE TABLE =================
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS attendance (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    roll INTEGER,
-    name TEXT,
-    status TEXT,
-    date TEXT,
-    UNIQUE(roll, date)  
-)
-""")
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        roll INTEGER,
+        name TEXT,
+        status TEXT,
+        date TEXT,
+        UNIQUE(roll, date)
+    )
+    """)
 
-    
-
-    
-        # ===== AUTO FIX OLD DATABASE (ADD MISSING COLUMNS) =====
     cursor.execute("PRAGMA table_info(students)")
-    columns = [col[1] for col in cursor.fetchall()]
+    cols = [c["name"] for c in cursor.fetchall()]
 
-    if "username" not in columns:
+    if "email" not in cols:
+        cursor.execute("ALTER TABLE students ADD COLUMN email TEXT")
+
+    if "username" not in cols:
         cursor.execute("ALTER TABLE students ADD COLUMN username TEXT")
 
-    if "photo" not in columns:
+    if "photo" not in cols:
         cursor.execute("ALTER TABLE students ADD COLUMN photo TEXT")
-
 
     # ================= DEFAULT ADMIN =================
     cursor.execute("SELECT * FROM users WHERE username='admin'")
@@ -72,3 +75,89 @@ def create_tables():
 
     conn.commit()
     conn.close()
+
+
+# ================= ADD STUDENT =================
+
+def add_student(roll, name, age, branch, email=None, photo=None):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            INSERT INTO students (roll, name, age, branch, email, photo)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (roll, name, age, branch, email, photo))
+
+        conn.commit()
+        return True
+    except:
+        return False
+    finally:
+        conn.close()
+
+
+# ================= GET ALL STUDENTS =================
+
+def get_all_students():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT roll, name, age, branch, email, photo FROM students")
+    students = cur.fetchall()
+    conn.close()
+    return students
+
+
+# ================= GET STUDENT BY ROLL =================
+
+def get_student_by_roll(roll):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT roll, name, age, branch, email, photo FROM students WHERE roll=?", (roll,))
+    student = cur.fetchone()
+    conn.close()
+    return student
+
+
+# ================= UPDATE STUDENT =================
+
+def update_student(roll, name, age, branch, email, photo=None):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    if photo:
+        cur.execute("""
+            UPDATE students
+            SET name = ?, age = ?, branch = ?, email = ?, photo = ?
+            WHERE roll = ?
+        """, (name, age, branch, email, photo, roll))
+    else:
+        cur.execute("""
+            UPDATE students
+            SET name = ?, age = ?, branch = ?, email = ?
+            WHERE roll = ?
+        """, (name, age, branch, email, roll))
+
+    conn.commit()
+    conn.close()
+
+
+# ================= DELETE STUDENT =================
+
+def delete_student(roll):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM students WHERE roll=?", (roll,))
+    conn.commit()
+    conn.close()
+
+
+# ================= GET STUDENT BY EMAIL (GOOGLE LOGIN) =================
+
+def get_student_by_email(email):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT roll, name, age, branch, email, photo FROM students WHERE email=?", (email,))
+    student = cur.fetchone()
+    conn.close()
+    return student

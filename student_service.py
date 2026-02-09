@@ -62,26 +62,26 @@ def get_student_by_roll(roll):
 
 
 # ================= UPDATE STUDENT =================
-def update_student(roll, name, age, branch, photo=None):
+
+def update_student(roll, name, age, branch, email, photo=None):
     conn = get_connection()
     cur = conn.cursor()
 
     if photo:
         cur.execute("""
             UPDATE students
-            SET name=?, age=?, branch=?, photo=?
-            WHERE roll=?
-        """, (name, age, branch, photo, roll))
+            SET name = ?, age = ?, branch = ?, email = ?, photo = ?
+            WHERE roll = ?
+        """, (name, age, branch, email, photo, roll))
     else:
         cur.execute("""
             UPDATE students
-            SET name=?, age=?, branch=?
-            WHERE roll=?
-        """, (name, age, branch, roll))
+            SET name = ?, age = ?, branch = ?, email = ?
+            WHERE roll = ?
+        """, (name, age, branch, email, roll))
 
     conn.commit()
     conn.close()
-    
 
 
 # ================= DELETE STUDENT =================

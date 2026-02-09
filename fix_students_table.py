@@ -1,9 +1,8 @@
 import sqlite3
 
-conn = sqlite3.connect("student.db")  # MUST match database.py
+conn = sqlite3.connect("student.db")  
 cur = conn.cursor()
 
-# Check existing columns
 cur.execute("PRAGMA table_info(students)")
 columns = [col[1] for col in cur.fetchall()]
 

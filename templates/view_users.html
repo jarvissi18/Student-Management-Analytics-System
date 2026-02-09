@@ -43,8 +43,8 @@
 {% if users and users|length > 0 %}
     {% for u in users %}
     <tr>
-        <td>{{ u[0] }}</td>   <!-- username -->
-        <td>{{ u[1] }}</td>   <!-- role -->
+        <td>{{ u[0] }}</td>   
+        <td>{{ u[1] }}</td>   
         <td>
             {% if u[0] != current %}
             <a href="{{ url_for('delete_user_page', username=u[0]) }}"

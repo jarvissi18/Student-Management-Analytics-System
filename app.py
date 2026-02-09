@@ -18,6 +18,7 @@ from reportlab.lib import colors
 import openpyxl
 
 from database import create_tables, get_connection
+from database import update_student
 from auth_service import create_user, reset_password, get_all_users, delete_user
 from student_service import add_student, view_students, get_student_by_username, get_student_by_roll, update_student, delete_student
 
@@ -93,16 +94,48 @@ def login():
 # ================= STUDENT DASHBOARD =================
 @app.route("/student/dashboard")
 def student_dashboard():
-    if "username" not in session:
+    if session.get("role") != "STUDENT":
         return redirect(url_for("login"))
 
-    student_id = session["username"]
+    email = session.get("username")
 
-    student = get_student_by_id(student_id)
-    total_days = get_total_classes(student_id)
-    present_days = get_present_days(student_id)
+    conn = get_connection()
+    cur = conn.cursor()
 
-    attendance_percent = round((present_days / total_days) * 100, 2) if total_days > 0 else 0
+    cur.execute("""
+        SELECT roll, photo, name, age, branch, email
+        FROM students
+        WHERE email = ? OR username = ?
+    """, (email, email))
+    student = cur.fetchone()
+
+    if not student:
+        conn.close()
+        return "Student profile not linked. Contact admin."
+
+    try:
+        roll = student["roll"]
+    except:
+        roll = student[0]
+
+    cur.execute(
+        "SELECT COUNT(*) FROM attendance WHERE roll = ?",
+        (roll,)
+    )
+    total_days = cur.fetchone()[0]
+
+    cur.execute(
+        "SELECT COUNT(*) FROM attendance WHERE roll = ? AND status = 'Present'",
+        (roll,)
+    )
+    present_days = cur.fetchone()[0]
+
+    conn.close()
+
+    attendance_percent = (
+        round((present_days / total_days) * 100, 2)
+        if total_days > 0 else 0
+    )
 
     return render_template(
         "student_dashboard.html",
@@ -116,10 +149,24 @@ def student_dashboard():
 # ================= STUDENT PROFILE =================
 @app.route("/student/profile")
 def student_profile():
+
     if session.get("role") != "STUDENT":
         return redirect(url_for("login"))
 
-    student = get_student_by_username(session["username"])
+    email = session.get("username")
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT roll, photo, name, age, branch, email
+        FROM students
+        WHERE email = ? OR username = ?
+    """, (email, email))
+
+    student = cur.fetchone()
+    conn.close()
+
     return render_template("student_profile.html", student=student)
 
 
@@ -366,11 +413,17 @@ def my_attendance():
     if session.get("role") != "STUDENT":
         return redirect(url_for("login"))
 
-    username = session.get("username")
+    email = session.get("username")  
+
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT roll FROM students WHERE username=?", (username,))
+    cur.execute("""
+        SELECT roll, photo, name, age, branch, email
+        FROM students
+        WHERE username = ? OR email = ?
+    """, (email, email))
+
     student = cur.fetchone()
 
     if not student:
@@ -378,7 +431,11 @@ def my_attendance():
         return "Student profile not linked. Contact admin."
 
     roll = student[0]
-    cur.execute("SELECT date, status FROM attendance WHERE roll=?", (roll,))
+
+    cur.execute(
+        "SELECT date, status FROM attendance WHERE roll = ?",
+        (roll,)
+    )
     records = cur.fetchall()
     conn.close()
 
@@ -386,7 +443,13 @@ def my_attendance():
     present_days = sum(1 for r in records if r[1] == "Present")
     percent = round((present_days / total_days) * 100, 2) if total_days > 0 else 0
 
-    return render_template("my_attendance.html", records=records, total=total_days, present=present_days, percent=percent)
+    return render_template(
+        "my_attendance.html",
+        records=records,
+        total=total_days,
+        present=present_days,
+        percent=percent
+    )
 
 # ================= Low ATTENDANCE =================
 
@@ -644,24 +707,39 @@ def export_excel():
     
 
 
-# ================= GOOGLE LOGIN =================
-
+# # ================= GOOGLE LOGIN =================
 
 @app.route('/google-login')
 def google_login():
     redirect_uri = url_for('google_auth', _external=True)
     return google.authorize_redirect(redirect_uri)
 
+
 @app.route('/google-auth')
 def google_auth():
     token = google.authorize_access_token()
     user_info = token.get('userinfo')
 
-    session["username"] = user_info["email"]
+    email = user_info["email"]
+
+    session["username"] = email
     session["role"] = "STUDENT"
 
-    return redirect(url_for("student_dashboard"))
+    conn = get_connection()
+    cur = conn.cursor()
 
+    cur.execute(
+        "SELECT roll FROM students WHERE email = ?",
+        (email,)
+    )
+    student = cur.fetchone()
+
+    conn.close()
+
+    if not student:
+        return "Your email is not registered as a student. Contact admin."
+
+    return redirect(url_for("student_dashboard"))
 
 
 # ================= VIEW STUDENTS =================
@@ -671,8 +749,15 @@ def students_page():
     if "username" not in session:
         return redirect(url_for("login"))
 
-    students = view_students()
-    return render_template("view_students.html", students=students, role=session["role"])
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT roll, name, age, branch, email, photo FROM students")
+    students = cur.fetchall()
+
+    conn.close()
+
+    return render_template("view_students.html", students=students, role=session.get("role"))
 
 
 # ================= SEARCH STUDENTS =================
@@ -689,18 +774,27 @@ def search_students_page():
         searched = True
         conn = get_connection()
         cur = conn.cursor()
+
         cur.execute(
             """
-            SELECT roll, name, age, branch, photo
+            SELECT roll, name, age, branch, email, photo
             FROM students
-            WHERE name LIKE ? OR roll LIKE ?
+            WHERE name LIKE ?
+               OR roll LIKE ?
+               OR email LIKE ?
             """,
-            (f"%{query}%", f"%{query}%")
+            (f"%{query}%", f"%{query}%", f"%{query}%")
         )
+
         students = cur.fetchall()
         conn.close()
 
-    return render_template("search_students.html", students=students, searched=searched, role=session["role"])
+    return render_template(
+        "search_students.html",
+        students=students,
+        searched=searched,
+        role=session["role"]
+    )
 
 
 # ================= ADD STUDENT =================
@@ -716,22 +810,29 @@ def add_student_page():
         name = request.form.get("name")
         age = request.form.get("age")
         branch = request.form.get("branch")
+        email = request.form.get("email")   
 
         photo_file = request.files.get("photo")
         filename = None
 
-        if photo_file and photo_file.filename != "":
-            filename = secure_filename(photo_file.filename)
-            save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            photo_file.save(save_path)
+        conn = get_connection()
+        cur = conn.cursor()
 
-        if not add_student(roll, name, age, branch, photo=filename):
-            error = "Roll number already exists!"
-        else:
+        try:
+            cur.execute("""
+                INSERT INTO students (roll, name, age, branch, email, photo)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (roll, name, age, branch, email, filename))
+            conn.commit()
+        except:
+            error = "Roll or Email already exists"
+        finally:
+            conn.close()
+
+        if not error:
             return redirect(url_for("students_page"))
 
     return render_template("add_student.html", error=error)
-
 # ================= USER MANAGEMENT =================
 @app.route("/users")
 def manage_users():
@@ -802,14 +903,54 @@ def forgot_password_page():
 
     return render_template("forgot_password.html")
 
-# ================= Edit Student Page =================
-
-@app.route("/students/edit/<int:roll>")
+# ================= EDIT STUDENT PAGE=================
+@app.route("/students/edit/<int:roll>", methods=["GET", "POST"])
 def edit_student_page(roll):
     if session.get("role") != "ADMIN":
         return redirect(url_for("login"))
 
-    student = get_student_by_roll(roll)
+    conn = get_connection()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form.get("name")
+        age = request.form.get("age")
+        branch = request.form.get("branch")
+        email = request.form.get("email")
+
+        photo_file = request.files.get("photo")
+        filename = None
+
+        if photo_file and photo_file.filename != "":
+            filename = secure_filename(photo_file.filename)
+            save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            photo_file.save(save_path)
+
+            cur.execute("""
+                UPDATE students
+                SET name=?, age=?, branch=?, email=?, photo=?
+                WHERE roll=?
+            """, (name, age, branch, email, filename, roll))
+        else:
+            cur.execute("""
+                UPDATE students
+                SET name=?, age=?, branch=?, email=?
+                WHERE roll=?
+            """, (name, age, branch, email, roll))
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for("students_page"))
+
+    
+    cur.execute("""
+        SELECT roll, name, age, branch, email, photo
+        FROM students
+        WHERE roll=?
+    """, (roll,))
+    student = cur.fetchone()
+    conn.close()
+
     return render_template("edit_student.html", student=student)
 
 # ================= UPDATE STUDENT =================
@@ -831,8 +972,10 @@ def update_student_route(roll):
         request.form["name"],
         request.form["age"],
         request.form["branch"],
+        request.form.get("email"),
         photo=filename
     )
+
     return redirect(url_for("students_page"))
 
 

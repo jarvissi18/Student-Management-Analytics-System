@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search Students |Student Management & Analytics System</title>
+    <title>Search Students | Student Management & Analytics System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -24,8 +24,6 @@
             <a href="{{ url_for('manage_users') }}">Manage Users</a>
             <a href="{{ url_for('reports_page') }}">Reports</a>
             <a href="{{ url_for('analytics_page') }}">Analytics</a>
-
-
         {% endif %}
 
         <a href="{{ url_for('logout') }}" class="logout">Logout</a>
@@ -40,15 +38,12 @@
 
         <div class="table-card animate">
 
-            <!-- 🔍 SEARCH FORM -->
+            <!-- SEARCH -->
             <form method="get" style="margin-bottom:20px;">
-                <input
-                    type="text"
-                    name="q"
-                    placeholder="Search by roll or name"
-                    value="{{ request.args.get('q','') }}"
-                    style="max-width:1037px;"
-                >
+                <input type="text" name="q"
+                       placeholder="Search by roll or name"
+                       value="{{ request.args.get('q','') }}"
+                       style="max-width:1037px;">
                 <button type="submit">Search</button>
             </form>
 
@@ -61,49 +56,56 @@
                         <th>Name</th>
                         <th>Age</th>
                         <th>Branch</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
 
                 <tbody>
-{% if searched %}
-    {% if students %}
-        {% for s in students %}
-        <tr>
-            <td>{{ s[0] }}</td>
-            <td>
-            {% if s[4] %}
-                <img src="{{ url_for('static', filename='uploads/' + s[4]) }}"
-     class="student-photo"
-     onclick="openModal(this.src)">
+                {% if searched %}
+                    {% if students %}
+                        {% for s in students %}
+                        <tr>
+                            <td>{{ s[0] }}</td>
 
-            {% else %}
-                No Photo
-            {% endif %}
-        </td>
-            <td>{{ s[1] }}</td>
-            <td>{{ s[2] }}</td>
-            <td>{{ s[3] }}</td>
-           
+                            <td>
+                                {% if s[5] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + s[5]) }}"
+                                         class="student-photo"
+                                         onclick="openModal(this.src)">
+                                {% else %}
+                                    No Photo
+                                {% endif %}
+                            </td>
 
+                            <td>{{ s[1] }}</td>
+                            <td>{{ s[2] }}</td>
+                            <td>{{ s[3] }}</td>
 
-        </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan="4" style="text-align:center;">
-                No results found
-            </td>
-        </tr>
-    {% endif %}
-{% else %}
-    <tr>
-        <td colspan="4" style="text-align:center;">
-            Enter roll or name to search
-        </td>
-    </tr>
-{% endif %}
-</tbody>
+                            <td>
+                                {% if s[4] %}
+                                    {{ s[4] }}
+                                {% else %}
+                                    Not Added
+                                {% endif %}
+                            </td>
 
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">
+                                No results found
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">
+                            Enter roll or name to search
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
             </table>
 
         </div>
@@ -112,32 +114,20 @@
 
 </div>
 
-<!-- IMAGE POPUP MODAL -->
+<!-- IMAGE POPUP -->
 <div id="imgModal" class="img-modal">
     <span class="close" onclick="closeModal()">&times;</span>
     <img class="modal-content" id="modalImg">
 </div>
 
-
 <script>
-function showImage(src){
-    document.getElementById("imgModal").style.display="block";
-    document.getElementById("fullImg").src=src;
-}
-function closeImage(){
-    document.getElementById("imgModal").style.display="none";
-}
-
 function openModal(src) {
     document.getElementById("imgModal").style.display = "block";
     document.getElementById("modalImg").src = src;
 }
-
 function closeModal() {
     document.getElementById("imgModal").style.display = "none";
 }
-
-
 </script>
 
 </body>

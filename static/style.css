@@ -295,7 +295,7 @@ tbody tr:hover {
 
 /* Forms */
 .form-card {
-    max-width: 400px;
+    max-width: 420px;
     margin-top: 25px;
     background: rgb(247, 251, 247);
     padding: 22px 24px;
@@ -625,13 +625,6 @@ table tbody tr:hover {
     transform: scale(1.05);
 }
 
-.student-photo {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e6ebf4;
-}
 
 /* Round student photo */
 .student-photo {
@@ -737,8 +730,8 @@ table tbody tr:hover {
 .modal-content {
     display: block;
     margin: auto;
-    max-width: 60%;   /* 🔥 YAHI CONTROL HAI */
-    max-height: 75vh; /* Screen ke andar hi rahe */
+    max-width: 60%;   
+    max-height: 75vh; 
     border-radius: 10px;
     box-shadow: 0 0 20px black;
 }
