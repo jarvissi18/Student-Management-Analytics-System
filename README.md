@@ -70,7 +70,6 @@ A full-stack web application built using **Flask** to manage students, attendanc
 
 ## ▶ How to Run Locally
 
-```bash
 git clone https://github.com/jarvissi18/Student-Management-Analytics-System
 cd Student-Management-Analytics-System
 pip install -r requirements.txt
