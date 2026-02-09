@@ -70,6 +70,7 @@ A full-stack web application built using **Flask** to manage students, attendanc
 
 ## ▶ How to Run Locally
 
+bash
 git clone https://github.com/jarvissi18/Student-Management-Analytics-System
 cd Student-Management-Analytics-System
 pip install -r requirements.txt
@@ -80,16 +81,10 @@ Open in browser:
 
 ---
 
-🔑 Default Admin Login
+## 🔑 Default Admin Login
 Username: admin
 Password: admin123
 
-🔗 Google Login Setup
-
-1. Go to Google Cloud Console
-2. Create OAuth Client ID
-3. Add Redirect URI:
-http://127.0.0.1:5000/google-auth
 
 ## 🔒 Security
 
@@ -122,4 +117,3 @@ Passionate about Backend Development & Data Systems
 ### 📄 PDF / Excel Report Export
 ![Reports](screenshots/attendance_report.png)
 
-This is the old readme file so give me the new updated file like this
