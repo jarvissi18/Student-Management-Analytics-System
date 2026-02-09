@@ -1,43 +1,56 @@
 # 🎓 Student Management & Analytics System
 
-A full-stack web application built using **Flask** to manage students, attendance tracking, analytics, and automated reporting with role-based authentication.
+A full-stack web application built using **Flask** to manage students, attendance tracking, analytics, reporting, and role-based authentication with Google Login integration.
 
 ---
 
 ## 🚀 Key Features
 
 ### 👨‍🏫 Admin Panel
-- Add / Edit / Delete Students  
-- Manage Users (Admin & Student roles)  
-- Mark Daily Attendance  
-- Attendance Reports by Date  
-- Low Attendance Detection (<75%)  
-- Analytics Dashboard with Charts  
-- Export Reports as **PDF** & **Excel**
 
-### 🎓 Student Panel
-- Secure Login System  
-- View Student Profile  
-- Check Attendance Percentage  
-- View Attendance History  
-- Personal Dashboard
+- Add Student with Photo Upload
+- Edit Student Details (Name, Age, Branch, Email, Photo)
+- Delete Students
+- Manage Users (Admin & Student Roles)
+- Search Students by Name or Roll
+- Mark Daily Attendance
+- Attendance Reports by Date
+- Low Attendance Detection (<75%)
+- Analytics Dashboard with Charts
+- Export Student Data to **Excel**
+- View Complete Student Records
 
 ---
 
-## 🔐 Authentication System
+### 🎓 Student Panel
+
+- Google OAuth Login
+- Secure Role-Based Access
+- Personal Student Dashboard
+- View Attendance Percentage
+- View Attendance History
+- View Student Profile with Photo
+- Linked Student Profile using Email
+
+---
+
+## 🔐 Authentication & Security
+
 - Role-Based Login (Admin / Student)
-- Password Hashing for Security
-- Forgot Password Recovery
-- Google OAuth Login Integration
+- Password Hashing (Werkzeug Security)
+- Google OAuth 2.0 Login
+- Session Management
+- Environment Variable Support for Secrets
 
 ---
 
 ## 📊 Analytics & Reports
+
 - Branch-wise Student Distribution
 - Present vs Absent Visualization
-- Attendance Trend Analysis
-- PDF Report Generation
-- Excel Data Export
+- Attendance Percentage Calculation
+- Attendance Trend Monitoring
+- Excel Export Functionality
 
 ---
 
@@ -49,8 +62,9 @@ A full-stack web application built using **Flask** to manage students, attendanc
 | **SQLite** | Database |
 | **HTML / CSS** | Frontend |
 | **Chart.js** | Analytics Charts |
-| **ReportLab** | PDF Reports |
 | **OpenPyXL** | Excel Export |
+| **Werkzeug** | Password Hashing |
+| **Authlib** | Google OAuth Login |
 
 ---
 
@@ -61,40 +75,3 @@ git clone https://github.com/jarvissi18/Student-Management-Analytics-System
 cd Student-Management-Analytics-System
 pip install -r requirements.txt
 python app.py
-```
-
-Open in browser:  
-👉 http://127.0.0.1:5000
-
----
-
-## 🔒 Security
-
-Sensitive credentials (API keys, OAuth secrets) are stored using **environment variables** and excluded from version control.
-
----
-
-## 👨‍💻 Author
-
-**Swapnil Suryawanshi**  
-Computer Engineering Student  
-Passionate about Backend Development & Data Systems
-
----
-
-## 📸 Application Screenshots
-
-### 🔐 Login Page
-![Login Page](screenshots/login.png)
-
-### 🎛 Admin Dashboard
-![Admin Dashboard](screenshots/admin_dashboard.png)
-
-### 👨‍🎓 Student Dashboard
-![Student Dashboard](screenshots/student_dashboard.png)
-
-### 📊 Attendance Analytics
-![Analytics](screenshots/attendance_analytics.png)
-
-### 📄 PDF / Excel Report Export
-![Reports](screenshots/attendance_report.png)
